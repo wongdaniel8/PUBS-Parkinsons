@@ -1,5 +1,4 @@
 import cPickle as pic
-<<<<<<< HEAD
 barcodes = ['GATGCTTATGTACGTAGA','AGGAGCAACTCCAACGGT']
 
 #unpack data structures
