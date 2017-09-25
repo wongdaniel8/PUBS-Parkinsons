@@ -47,9 +47,6 @@ for k,v in bar2cod.iteritems():
 #################################################################
 # Count the number of each amino acid substitution at each residue position
 
-# Initialize list that will hold residue/amino acid count tuples
-count_list = []
-
 # Create list of the keys of the amino acid dictionary, our list of all possible aas
 all_aas = [i for i in aa2num]
 #print all_aas
@@ -69,7 +66,7 @@ for k, aa_list in res2aa.iteritems():
     #print set(counts)
     #print set(aa_list)
     if not set(counts) == set(all_aas):
-        print "Residue %r is missing the following amino acid mutations: %r" %(k, set(all_aas) - set(counts))
+        print "Residue %r is missing the following amino acid mutations: %s" %(k, ', '.join(set(all_aas) - set(counts)))
     else:
         print "Residue %r has mutations to all possible amino acids." %k
 
@@ -78,4 +75,4 @@ for k, aa_list in res2aa.iteritems():
     count_list.append(res_count)
 
 # Print the dictionary of residue counts
-print count_list
+#print count_list
