@@ -29,12 +29,14 @@ for i in ogDict:
 heatmap, xedges, yedges = np.histogram2d(x, y, bins=50)
 extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
 # plt.colorbar(heatmap) 
+fig, ax = plt.subplots()
 plt.title("Frequency of Mutations at each Residue Number")
 plt.xlabel("residue number")
 plt.ylabel("amino acid")
-plt.clf()
+# plt.clf()
 plt.imshow(heatmap.T, extent=extent, origin='lower')
-plt.show()
+# plt.show()
+fig.savefig("heatmap")
 
 
 
