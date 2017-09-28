@@ -64,14 +64,14 @@ def merge(r1, r3):
 	#if the other read has a valid nucleotide, we take the valid one
 	#if both are N, we input from the wt sequence
 	for i in range(0, len(r1overlap)):
-		if r1overlap[i] == r3rc[i] != "N":
-			returnSeq += r1[i]
+		if (r1overlap[i] == r3rc[i]) and r1overlap[i] != "N":
+			returnSeq += r1overlap[i]
 		elif r1overlap[i] == "N" and r3rc[i] != "N":
 			returnSeq += r3rc[i]
 		elif r1overlap[i] != "N" and r3rc[i] == "N":
-			returnSeq += r1[i]
+			returnSeq += r1overlap[i]
 		else:
-			returnSeq += wt[220 + i]
+			returnSeq += wt[220 + i] 
 
 	#append r3rc to rteturnSeq
 	for i in range(0, len(r3rc)):
@@ -79,6 +79,10 @@ def merge(r1, r3):
 			returnSeq += wt[220 + i]
 		else:
 			returnSeq += r3rc[i]
+
+	for i in range(0, len(returnSeq)):
+		if returnSeq[i] == "N":
+			print(i)
 
 	print(returnSeq)
 	return returnSeq
@@ -104,9 +108,6 @@ def findAminoAcid(seq, mutationIndex):
 merge (R1List[1], R3List[1])
 # print(R1List[0])
 # print(R3List[0])
-# print(R3List)
-# print(len(R1List))
-# print(len(R2List))
 
 # print(len(wt))
 # print(len(R1List[0]))
