@@ -149,8 +149,7 @@ def scoreHistogram(read):
 
 def merge(r1, r3, index):
 	"""
-	Returns a string of the same length as the WT sequence, resolving any conflicts between forward read r1 and backward read r3.
-	Returned string should be free of any Ns.
+	Retursn an index of the predicted mutation along with the amino acid correlate, returns -1 if not possible
 	"""
 	##indices relative to wt
 		# R1 = [0,299]
@@ -165,9 +164,9 @@ def merge(r1, r3, index):
 	# print("wt last 50: ", wt[-50:])
 	# print(r3rcmismatches)
 
-	#easy case of no N's in first half of r1 or last half of wt? (check this should be half or some proportion of read1 and r3rc, not necessarily 420 / 2 = 210)
-	if "N" not in r1[0:210] and "N" not in r3rc[-210:]:
-		return dummyImpute()
+	# #easy case of no N's in first half of r1 or last half of wt? (check this should be half or some proportion of read1 and r3rc, not necessarily 420 / 2 = 210)
+	# if "N" not in r1[0:210] and "N" not in r3rc[-210:]:
+	# 	return dummyImpute()
 
 	r1mismatches = [i for i in range(len(r1)) if r1[i] != wt[i] and r1[i] != "N"]
 	r3rcmismatches = [i for i in range(len(r3rc)) if r3rc[i] != wt[219 + i] and r3rc[i] != "N"]
@@ -224,6 +223,7 @@ def merge(r1, r3, index):
 		if maxR1Index % 3 == 0:
 			s1 = r1[mutIndexR1] + r1[mutIndexR1 + 1] + r1[mutIndexR1 + 2]
 			s1 = s1.replace("T", "U")
+			# print(mutIndexR1, translate[s1])
 			return (mutIndexR1, translate[s1])
 		if maxR1Index % 3 == 1:
 			s1 = r1[mutIndexR1 - 1] + r1[mutIndexR1] + r1[mutIndexR1 + 1]
@@ -251,21 +251,6 @@ def merge(r1, r3, index):
 	if len(r1mismatches) == 0 and len(r3rcmismatches) == 0: #no apparent mutation outside of the N-cases
 		print("thrown out")
 		return -1
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
 
 	#def dummyImpute():
 		##append r1 to returnSeq
@@ -303,34 +288,10 @@ def merge(r1, r3, index):
 		# return returnSeq
 
 
+	# mismatches = [i for i in range(len(wt)) if returnSeq[i] != wt[i]]
+	# print("msi", len(mismatches), mismatches)
 
-
-	mismatches = [i for i in range(len(wt)) if returnSeq[i] != wt[i]]
-	print("msi", len(mismatches), mismatches)
-
-
-
-	return returnSeq
-
-
-def findMutation(seq):
-	"""
-	Returns the index of the mutation found in seq based on heuristics
-	"""
-	return 
-
-
-def findAminoAcid(seq, mutationIndex):
-	"""
-	returns the amino acid that corresponds to the mutation at index mutationIndex found in the sequence seq
-	"""
-	return 
-
-
-
-
-
-
+	# return returnSeq
 
 
 #COMMANDS TO RUN THE SCRIPT===================================
