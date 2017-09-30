@@ -3,6 +3,8 @@ from Bio.Seq import Seq
 import sys
 import numpy as np
 import pickle
+import matplotlib.pyplot as plt
+
 
 
 R1List = []
@@ -14,7 +16,7 @@ r3Score = []
 wt = "ATGGATGTATTCATGAAAGGACTTTCAAAGGCCAAGGAGGGAGTTGTGGCTGCTGCTGAGAAAACCAAACAGGGTGTGGCAGAAGCAGCAGGAAAGACAAAAGAGGGTGTTCTCTATGTAGGCTCCAAAACCAAGGAGGGAGTGGTGCATGGTGTGGCAACAGTGGCTGAGAAGACCAAAG\
 AGCAAGTGACAAATGTTGGAGGAGCAGTGGTGACGGGTGTGACAGCAGTAGCCCAGAAGACAGTGGAGGGAGCAGGGAGCATTGCAGCAGCCACTGGCTTTGTCAAAAAGGACCAGTTGGGCAAGAATGAAGAAGGAGCCCCACAGGAAGGAATTCTGGAAGATATGCCTGTGGATCCTGA\
 CAATGAGGCTTATGAAATGCCTTCTGAGGAAGGGTATCAAGACTACGAACCTGAAGCC"
-
+translate = pickle.load(open("translate.pkl", "rb"))
 ##load from pickle files
 R1List = pickle.load( open( "R1List.p", "rb" ) )
 R2List = pickle.load( open( "R2List.p", "rb" ) )
@@ -55,6 +57,9 @@ else:
 # 	    		l.append(line)
 # 	   		count += 1
 
+Qscore = dict((chr(i),i-33) for i in range(33,74)) 
+print(Qscore)
+
 for file in files:
 	if location == "l":
 		if file == "R1":
@@ -72,10 +77,26 @@ for file in files:
 			l1 = r3Score
 
 
-	for record in SeqIO.parse(file, "fastq"):
-		scores = record.letter_annotations["phred_quality"]
-		median = 0#np.median(scores)
-		l1.append(scores)
+	with open(file, "rU") as f:
+	    count = -3
+	    for line in f:
+	    	if count == -1 or count % 4 != 0:
+	    		count += 1
+	    		continue
+	    	if count % 4 == 0:
+		    	line = line.rstrip("\n") 
+		    	scores = []
+		    	for char in line:
+		    		scores.append(Qscore[char])
+	    		l1.append(scores)
+	   		count += 1
+
+
+
+	# for record in SeqIO.parse(file, "fastq"):
+	# 	scores = record.letter_annotations["phred_quality"]
+	# 	median = 0#np.median(scores)
+	# 	l1.append(scores)
 		# if location == "l":
 		# 	if file == "R1":
 		# 		r1Score.append((scores, median))
@@ -103,23 +124,30 @@ pickle.dump( r2Score, open( "r2Score.p", "wb" ) )
 pickle.dump( r3Score, open( "r3Score.p", "wb" ) )
 
 
-
-
-# print(len(R1List))
-print(len(r1Score))
+# print(r3Score)
+print(len(r1Score[0]))
+print(len(R1List[0]))
+# print(r3Score)
 # print(len(R1List[0]))
 # print(len(r3Score[0]))
 
 
 
-# print(R1List)
-# __N____NN____NNN_________NNNNNNNNNNNN
-#                 NNNNNNNN__________NNNN______N____N______N________
+def scoreHistogram(read):
+	if read == "r1":
+		scoreMatrix = np.asarray(r1Score)
+	if read == "r3":
+		scoreMatrix = np.asarray(r3Score)
+	means = np.mean(scoreMatrix, axis=0)
+	print(means)
+	plt.bar(range(len(means)), means)
+	plt.show()
+# scoreHistogram("r1")
+# scoreHistogram("r3")
 
-#Ns at end mostly
-#
 
-def merge(r1, r3):
+
+def merge(r1, r3, index):
 	"""
 	Returns a string of the same length as the WT sequence, resolving any conflicts between forward read r1 and backward read r3.
 	Returned string should be free of any Ns.
@@ -131,49 +159,156 @@ def merge(r1, r3):
 	r3rc = seq.reverse_complement()
 	returnSeq = "" #sequence to build and return
 
-	r1mismatches = [i for i in range(len(r1)) if r1[i] != wt[i]]
-	r3rcmismatches = [i for i in range(len(r3rc)) if r3rc[i] != wt[219 + i]]
-
-	print(r1mismatches)
-	print("r3rc last 50", r3rc[-50:])
-	print("wt last 50: ", wt[-50:])
-	print(r3rcmismatches)
-
-	#append r1 to returnSeq
-	for i in range(0, len(r1)):
-		if r1[i] == "N":
-			returnSeq += wt[i]
-		else:
-			returnSeq += r1[i]
-
-	r1overlap = r1[219:300] #299 inclusive # a substring of r1 representing the overlapping region of r1 with the other read r3rc
 	
-	#build overlap region, if both are identical and non-N we take that, 
-	#if the other read has a valid nucleotide, we take the valid one
-	#if both are N, we input from the wt sequence
-	for i in range(0, len(r1overlap)):
-		if (r1overlap[i] == r3rc[i]) and r1overlap[i] != "N":
-			returnSeq += r1overlap[i]
-		elif r1overlap[i] == "N" and r3rc[i] != "N":
-			returnSeq += r3rc[i]
-		elif r1overlap[i] != "N" and r3rc[i] == "N":
-			returnSeq += r1overlap[i]
-		else:
-			returnSeq += wt[219 + i] 
+	# print(r1mismatches)
+	# print("r3rc last 50", r3rc[-50:])
+	# print("wt last 50: ", wt[-50:])
+	# print(r3rcmismatches)
 
-	#append r3rc to rteturnSeq
-	for i in range(0, len(r3rc)):
-		if r3rc[i] == "N":
-			returnSeq += wt[219 + i]
-		else:
-			returnSeq += r3rc[i]
+	#easy case of no N's in first half of r1 or last half of wt? (check this should be half or some proportion of read1 and r3rc, not necessarily 420 / 2 = 210)
+	if "N" not in r1[0:210] and "N" not in r3rc[-210:]:
+		return dummyImpute()
 
-	for i in range(0, len(returnSeq)):
-		if returnSeq[i] == "N":
-			print(i)
+	r1mismatches = [i for i in range(len(r1)) if r1[i] != wt[i] and r1[i] != "N"]
+	r3rcmismatches = [i for i in range(len(r3rc)) if r3rc[i] != wt[219 + i] and r3rc[i] != "N"]
+
+
+	#eliminate mismatches that have an N in reading frame:
+	newr1 = []
+	for mis in r1mismatches:
+		if mis < len(r1) - 3 and mis > 1: #won't work for edge indices 
+			if mis % 3 == 0:
+				if r1[mis + 1] != "N" and r1[mis + 2] != "N":
+					newr1.append(mis)
+			if mis % 3 == 1:
+				if r1[mis - 1] != "N" and r1[mis + 1] != "N":
+					newr1.append(mis)
+			if mis % 3 == 2:
+				if r1[mis - 1] != "N" and r1[mis - 2] != "N":
+					newr1.append(mis)
+	r1mismatches = newr1
+	newr3rc = []
+	for mis in r3rcmismatches: #check frame for r3rc!!!!!!!!!!!!!! also wobble bp
+		if mis < len(r3rc) - 3 and mis > 1: #won't work for edge indices 
+			if mis % 3 == 0:
+				if r3rc[mis + 1] != "N" and r3rc[mis + 2] != "N":
+					newr3rc.append(mis)
+			if mis % 3 == 1:
+				if r3rc[mis - 1] != "N" and r3rc[mis + 1] != "N":
+					newr3rc.append(mis)
+			if mis % 3 == 2:
+				if r3rc[mis - 1] != "N" and r3rc[mis - 2] != "N":
+					newr3rc.append(mis)
+	r3rcmismatches = newr3rc
+
+	print("AAA",r1mismatches, r3rcmismatches)
+	
+	#get most confident mutant index  #bug is here
+	confidences = []
+	for mis in r1mismatches:
+		confidences.append(r1Score[index][mis])
+	maxR1Index = np.argmax(confidences)
+	maxR1Value = confidences[maxR1Index]
+	mutIndexR1 = r1mismatches[maxR1Index]
+	# repeat for r3rc
+	confidences = []
+	for mis in r3rcmismatches:
+		confidences.append(r3Score[index][mis])
+	maxR3Index = np.argmax(confidences)
+	maxR3Value = confidences[maxR3Index]
+	mutIndexR3 = r3rcmismatches[maxR3Index]
+
+
+
+	if maxR1Value > maxR3Value:
+		if maxR1Index % 3 == 0:
+			s1 = r1[mutIndexR1] + r1[mutIndexR1 + 1] + r1[mutIndexR1 + 2]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR1, translate[s1])
+		if maxR1Index % 3 == 1:
+			s1 = r1[mutIndexR1 - 1] + r1[mutIndexR1] + r1[mutIndexR1 + 1]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR1, translate[s1])
+		if maxR1Index % 3 == 2:
+			s1 = r1[mutIndexR1 - 2] + r1[mutIndexR1 - 1] + r1[mutIndexR1]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR1, translate[s1])
+	
+	else: #check frame for r3rc!!!!!!!!!!!!!!
+		if mutIndexR3 % 3 == 0:
+			s1 = r3rc[mutIndexR3] + r3rc[mutIndexR3 + 1] + r3rc[mutIndexR3 + 2]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR3, translate[s1])
+		if mutIndexR3 % 3 == 1:
+			s1 = r3rc[mutIndexR3 - 1] + r3rc[mutIndexR3] + r3rc[mutIndexR3 + 1]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR3, translate[s1])
+		if mutIndexR3 % 3 == 2:
+			s1 = r3rc[mutIndexR3 - 2] + r3rc[mutIndexR3 - 1] + r3rc[mutIndexR3]
+			s1 = s1.replace("T", "U")
+			return (mutIndexR3, translate[s1])
+		
+	if len(r1mismatches) == 0 and len(r3rcmismatches) == 0: #no apparent mutation outside of the N-cases
+		print("thrown out")
+		return -1
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	#def dummyImpute():
+		##append r1 to returnSeq
+		# for i in range(0, len(r1)):
+		# 	if r1[i] == "N":
+		# 		returnSeq += wt[i]
+		# 	else:
+		# 		returnSeq += r1[i]
+
+		# r1overlap = r1[219:300] #299 inclusive # a substring of r1 representing the overlapping region of r1 with the other read r3rc
+		
+		# #build overlap region, if both are identical and non-N we take that, 
+		# #if the other read has a valid nucleotide, we take the valid one
+		# #if both are N, we input from the wt sequence
+		# for i in range(0, len(r1overlap)):
+		# 	if (r1overlap[i] == r3rc[i]) and r1overlap[i] != "N":
+		# 		returnSeq += r1overlap[i]
+		# 	elif r1overlap[i] == "N" and r3rc[i] != "N":
+		# 		returnSeq += r3rc[i]
+		# 	elif r1overlap[i] != "N" and r3rc[i] == "N":
+		# 		returnSeq += r1overlap[i]
+		# 	else:
+		# 		returnSeq += wt[219 + i] 
+
+		# #append r3rc to returnSeq
+		# for i in range(0, len(r3rc)):
+		# 	if r3rc[i] == "N":
+		# 		returnSeq += wt[219 + i]
+		# 	else:
+		# 		returnSeq += r3rc[i]
+
+		# for i in range(0, len(returnSeq)):
+		# 	if returnSeq[i] == "N":
+		# 		print(i)
+		# return returnSeq
+
+
+
 
 	mismatches = [i for i in range(len(wt)) if returnSeq[i] != wt[i]]
-	print("msi", mismatches)
+	print("msi", len(mismatches), mismatches)
+
+
 
 	return returnSeq
 
@@ -200,7 +335,7 @@ def findAminoAcid(seq, mutationIndex):
 
 #COMMANDS TO RUN THE SCRIPT===================================
 
-merge (R1List[1], R3List[1])
+# merge (R1List[1], R3List[1])
 # print(R1List[0])
 # print(R3List[0])
 
@@ -222,6 +357,8 @@ merge (R1List[1], R3List[1])
 # count Ns in R1 N1
 # count Ns in R2 N2
 
+for i in range(0, len(R1List)):
+	merge(R1List[i], R3List[i], i)
 
 
 
