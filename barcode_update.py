@@ -8,9 +8,11 @@ import numpy as np
 import hclust as hc
 import scipy.sparse as sp
 import os
+from sys import argv
 
-import cPickle as pic
-data = pic.load(open("allele_dic.pkl", "rb"))
+barcode_dict = argv[1]
+
+data = pic.load(open(barcode_dict, "rb"))
 translate_data = pic.load(open("translate.pkl", "rb"))
 aminoNum = pic.load(open("aminotonumber.pkl", "rb"))
 
@@ -80,7 +82,7 @@ plt.setp(cg.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
 plt.setp(cg.ax_heatmap.xaxis.get_majorticklabels(), rotation=90)
 
 plt.title("Frequency of Barcodes \nClustered by Euclidean Dist\n(color center = average # barcodes)")
-plt.show()
+#plt.show()
 cg.savefig("cluster_heatmap.png")
 
 # # # # # # # # # # # # # # # # # # # # # #
