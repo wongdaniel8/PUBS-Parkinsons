@@ -16,17 +16,17 @@ AGCAAGTGACAAATGTTGGAGGAGCAGTGGTGACGGGTGTGACAGCAGTAGCCCAGAAGACAGTGGAGGGAGCAGGGAGC
 CAATGAGGCTTATGAAATGCCTTCTGAGGAAGGGTATCAAGACTACGAACCTGAAGCC"
 
 ##load from pickle files
-translate = pickle.load(open("translate.pkl", "rb"))
-aminoNum = pickle.load(open("aminotonumber.pkl", "rb"))
-R1List = pickle.load( open( "R1List.p", "rb" ) )
-R2List = pickle.load( open( "R2List.p", "rb" ) )
-R3List = pickle.load( open( "R3List.p", "rb" ) )
-r1Score = pickle.load( open( "r1Score.p", "rb" ) )
-r2Score = pickle.load( open( "r2Score.p", "rb" ) )
-r3Score = pickle.load( open( "r3Score.p", "rb" ) )
+#translate = pickle.load(open("translate.pkl", "rb"))
+#aminoNum = pickle.load(open("aminotonumber.pkl", "rb"))
+#R1List = pickle.load( open( "R1List.p", "rb" ) )
+#R2List = pickle.load( open( "R2List.p", "rb" ) )
+#R3List = pickle.load( open( "R3List.p", "rb" ) )
+#r1Score = pickle.load( open( "r1Score.p", "rb" ) )
+#r2Score = pickle.load( open( "r2Score.p", "rb" ) )
+#r3Score = pickle.load( open( "r3Score.p", "rb" ) )
 
 location = sys.argv[1]
-if location == "l": 
+if location == "l":
 	files = ["R1", "R2", "R3"] #local
 else:
 	files = ["Undetermined_S0_L001_R1_001.fastq", "Undetermined_S0_L001_R2_001.fastq", "Undetermined_S0_L001_R3_001.fastq"] #global file names on server for R1, R2, R3
@@ -53,59 +53,59 @@ else:
 # 	    	if count == -1 or count % 4 != 0:
 # 	    		count += 1
 # 	    		continue
-# 	    	line = line.rstrip("\n") 
+# 	    	line = line.rstrip("\n")
 # 	    	if count % 4 == 0:
 # 	    		l.append(line)
 # 	   		count += 1
 
 
 ##parse out Qscores and instantiate r(n)Score lists
-# Qscore = dict((chr(i),i-33) for i in range(33,74)) 
-# for file in files:
-# 	if location == "l":
-# 		if file == "R1":
-# 			l1 = r1Score
-# 		if file == "R2":
-# 			l1 = r2Score
-# 		if file =="R3":
-# 			l1 = r3Score
-# 	else:
-# 		if file == "Undetermined_S0_L001_R1_001.fastq":
-# 			l1 = r1Score
-# 		if file == "Undetermined_S0_L001_R2_001.fastq":
-# 			l1 = r2Score
-# 		if file == "Undetermined_S0_L001_R3_001.fastq":
-# 			l1 = r3Score
-# 	with open(file, "rU") as f:
-# 	    count = -3
-# 	    for line in f:
-# 	    	if count == -1 or count % 4 != 0:
-# 	    		count += 1
-# 	    		continue
-# 	    	if count % 4 == 0:
-# 		    	line = line.rstrip("\n") 
-# 		    	scores = []
-# 		    	for char in line:
-# 		    		scores.append(Qscore[char])
-# 	    		l1.append(scores)
-# 	   		count += 1
+ Qscore = dict((chr(i),i-33) for i in range(33,74))
+ for file in files:
+ 	if location == "l":
+ 		if file == "R1":
+ 			l1 = r1Score
+ 		if file == "R2":
+ 			l1 = r2Score
+ 		if file =="R3":
+ 			l1 = r3Score
+ 	else:
+ 		if file == "Undetermined_S0_L001_R1_001.fastq":
+ 			l1 = r1Score
+ 		if file == "Undetermined_S0_L001_R2_001.fastq":
+ 			l1 = r2Score
+ 		if file == "Undetermined_S0_L001_R3_001.fastq":
+ 			l1 = r3Score
+ 	with open(file, "rU") as f:
+ 	    count = -3
+ 	    for line in f:
+ 	    	if count == -1 or count % 4 != 0:
+ 	    		count += 1
+ 	    		continue
+ 	    	if count % 4 == 0:
+ 		    	line = line.rstrip("\n")
+ 		    	scores = []
+ 		    	for char in line:
+ 		    		scores.append(Qscore[char])
+ 	    		l1.append(scores)
+ 	   		count += 1
 
 
 ##dump into pickle files
-# pickle.dump( R1List, open( "R1List.p", "wb" ) )
-# pickle.dump( R2List, open( "R2List.p", "wb" ) )
-# pickle.dump( R3List, open( "R3List.p", "wb" ) )
-# pickle.dump( r1Score, open( "r1Score.p", "wb" ) )
-# pickle.dump( r2Score, open( "r2Score.p", "wb" ) )
-# pickle.dump( r3Score, open( "r3Score.p", "wb" ) )
+ pickle.dump( R1List, open( "R1List.p", "wb" ) )
+ pickle.dump( R2List, open( "R2List.p", "wb" ) )
+ pickle.dump( R3List, open( "R3List.p", "wb" ) )
+ pickle.dump( r1Score, open( "r1Score.p", "wb" ) )
+ pickle.dump( r2Score, open( "r2Score.p", "wb" ) )
+ pickle.dump( r3Score, open( "r3Score.p", "wb" ) )
 
 
-# print(r3Score)
-# print(len(r1Score[0]))
-# print(len(R1List[0]))
-# print(r3Score)
-# print(len(R1List[0]))
-# print(len(r3Score[0]))
+ print(r3Score)
+ print(len(r1Score[0]))
+ print(len(R1List[0]))
+ print(r3Score)
+ print(len(R1List[0]))
+ print(len(r3Score[0]))
 
 
 
@@ -134,7 +134,7 @@ def merge(r1, r3, index):
 	r3rc = seq.reverse_complement()
 	returnSeq = "" #sequence to build and return
 
-	
+
 	# print(r1mismatches)
 	# print("r3rc last 50", r3rc[-50:])
 	# print("wt last 50: ", wt[-50:])
@@ -151,7 +151,7 @@ def merge(r1, r3, index):
 	#eliminate mismatches that have an N in reading frame:
 	newr1 = []
 	for mis in r1mismatches:
-		if mis < len(r1) - 3 and mis > 1: #won't work for edge indices 
+		if mis < len(r1) - 3 and mis > 1: #won't work for edge indices
 			if mis % 3 == 0:
 				if r1[mis + 1] != "N" and r1[mis + 2] != "N":
 					newr1.append(mis)
@@ -164,7 +164,7 @@ def merge(r1, r3, index):
 	r1mismatches = newr1
 	newr3rc = []
 	for mis in r3rcmismatches: #check frame for r3rc!!!!!!!!!!!!!! also wobble bp
-		if mis < len(r3rc) - 3 and mis > 1: #won't work for edge indices 
+		if mis < len(r3rc) - 3 and mis > 1: #won't work for edge indices
 			if mis % 3 == 0:
 				if r3rc[mis + 1] != "N" and r3rc[mis + 2] != "N":
 					newr3rc.append(mis)
@@ -177,7 +177,7 @@ def merge(r1, r3, index):
 	r3rcmismatches = newr3rc
 
 	print("AAA",r1mismatches, r3rcmismatches)
-	
+
 	#get most confident mutant index  #bug is here
 	confidences = []
 	for mis in r1mismatches:
@@ -209,7 +209,7 @@ def merge(r1, r3, index):
 			s1 = r1[mutIndexR1 - 2] + r1[mutIndexR1 - 1] + r1[mutIndexR1]
 			s1 = s1.replace("T", "U")
 			return (mutIndexR1, s1, translate[s1])
-	
+
 	else: #check frame for r3rc!!!!!!!!!!!!!!
 		if mutIndexR3 % 3 == 0:
 			s1 = r3rc[mutIndexR3] + r3rc[mutIndexR3 + 1] + r3rc[mutIndexR3 + 2]
@@ -223,7 +223,7 @@ def merge(r1, r3, index):
 			s1 = r3rc[mutIndexR3 - 2] + r3rc[mutIndexR3 - 1] + r3rc[mutIndexR3]
 			s1 = s1.replace("T", "U")
 			return (mutIndexR3, s1, translate[s1])
-		
+
 	if len(r1mismatches) == 0 and len(r3rcmismatches) == 0: #no apparent mutation outside of the N-cases
 		print("thrown out")
 		return -1
@@ -237,8 +237,8 @@ def merge(r1, r3, index):
 		# 		returnSeq += r1[i]
 
 		# r1overlap = r1[219:300] #299 inclusive # a substring of r1 representing the overlapping region of r1 with the other read r3rc
-		
-		# #build overlap region, if both are identical and non-N we take that, 
+
+		# #build overlap region, if both are identical and non-N we take that,
 		# #if the other read has a valid nucleotide, we take the valid one
 		# #if both are N, we input from the wt sequence
 		# for i in range(0, len(r1overlap)):
@@ -249,7 +249,7 @@ def merge(r1, r3, index):
 		# 	elif r1overlap[i] != "N" and r3rc[i] == "N":
 		# 		returnSeq += r1overlap[i]
 		# 	else:
-		# 		returnSeq += wt[219 + i] 
+		# 		returnSeq += wt[219 + i]
 
 		# #append r3rc to returnSeq
 		# for i in range(0, len(r3rc)):
@@ -302,10 +302,10 @@ for i in range(0, len(R1List)):
 		continue
 	else: #residue, codonMut, aminoAcid, num]
 		barcodes[R2List[i]] = [merged[0], merged[1], merged[2], aminoNum[merged[2]]]
-print(barcodes) 
+print(barcodes)
 
 pickle.dump( barcodes, open( "barcodes.p", "wb" ) )
-	
+
 
 
 
@@ -328,9 +328,3 @@ pickle.dump( barcodes, open( "barcodes.p", "wb" ) )
 		# 		r2Score.append((scores, median))
 		# 	if file == "Undetermined_S0_L001_R3_001.fastq":
 		# 		r3Score.append((scores, median))
-
-
-
-
-
-
