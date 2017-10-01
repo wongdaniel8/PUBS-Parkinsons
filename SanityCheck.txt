@@ -1,0 +1,76 @@
+Residue 2 is missing the following amino acid mutations: Q, M
+Residue 3 has mutations to all possible amino acids.
+Residue 4 has mutations to all possible amino acids.
+Residue 5 has mutations to all possible amino acids.
+Residue 6 is missing the following amino acid mutations: M
+Residue 7 has mutations to all possible amino acids.
+Residue 8 has mutations to all possible amino acids.
+Residue 9 has mutations to all possible amino acids.
+Residue 10 has mutations to all possible amino acids.
+Residue 11 has mutations to all possible amino acids.
+Residue 12 is missing the following amino acid mutations: H, E
+Residue 13 has mutations to all possible amino acids.
+Residue 14 has mutations to all possible amino acids.
+Residue 15 has mutations to all possible amino acids.
+Residue 16 is missing the following amino acid mutations: M
+Residue 17 has mutations to all possible amino acids.
+Residue 18 has mutations to all possible amino acids.
+Residue 19 has mutations to all possible amino acids.
+Residue 20 has mutations to all possible amino acids.
+Residue 21 has mutations to all possible amino acids.
+Residue 22 is missing the following amino acid mutations: K
+Residue 23 has mutations to all possible amino acids.
+Residue 24 has mutations to all possible amino acids.
+Residue 25 has mutations to all possible amino acids.
+Residue 26 has mutations to all possible amino acids.
+Residue 27 has mutations to all possible amino acids.
+Residue 28 has mutations to all possible amino acids.
+Residue 29 has mutations to all possible amino acids.
+Residue 30 is missing the following amino acid mutations: M
+Residue 31 is missing the following amino acid mutations: Y
+Residue 32 is missing the following amino acid mutations: D, W
+Residue 33 has mutations to all possible amino acids.
+Residue 34 has mutations to all possible amino acids.
+Residue 35 has mutations to all possible amino acids.
+Residue 36 is missing the following amino acid mutations: M
+Residue 37 has mutations to all possible amino acids.
+Residue 38 has mutations to all possible amino acids.
+Residue 39 is missing the following amino acid mutations: M
+Residue 40 is missing the following amino acid mutations: M
+Residue 41 is missing the following amino acid mutations: M
+Residue 42 has mutations to all possible amino acids.
+Residue 43 has mutations to all possible amino acids.
+Residue 44 has mutations to all possible amino acids.
+Residue 45 has mutations to all possible amino acids.
+Residue 46 has mutations to all possible amino acids.
+Residue 47 is missing the following amino acid mutations: C, N
+Residue 48 has mutations to all possible amino acids.
+Residue 49 is missing the following amino acid mutations: Q, M
+Residue 50 is missing the following amino acid mutations: N
+Residue 51 is missing the following amino acid mutations: M
+Residue 52 has mutations to all possible amino acids.
+Residue 53 has mutations to all possible amino acids.
+Residue 54 is missing the following amino acid mutations: M
+Residue 55 has mutations to all possible amino acids.
+Residue 56 has mutations to all possible amino acids.
+Residue 57 has mutations to all possible amino acids.
+Residue 58 is missing the following amino acid mutations: M
+Residue 59 is missing the following amino acid mutations: Q, H, M, D, F
+Residue 60 is missing the following amino acid mutations: M
+Residue 61 has mutations to all possible amino acids.
+Residue 62 has mutations to all possible amino acids.
+Residue 63 has mutations to all possible amino acids.
+Residue 64 has mutations to all possible amino acids.
+Residue 65 has mutations to all possible amino acids.
+Residue 66 has mutations to all possible amino acids.
+Residue 67 is missing the following amino acid mutations: M
+Residue 68 is missing the following amino acid mutations: H
+Residue 69 has mutations to all possible amino acids.
+Residue 70 has mutations to all possible amino acids.
+Residue 71 has mutations to all possible amino acids.
+Residue 72 has mutations to all possible amino acids.
+Residue 73 has mutations to all possible amino acids.
+Residue 74 has mutations to all possible amino acids.
+Residue 75 is missing the following amino acid mutations: W
+Residue 76 is missing the following amino acid mutations: Y, K, M, N
+Residue 77 is missing the following amino acid mutations: A, E, D, G, F, I, H, K, STOP, M, L, N, Q, P, S, R, T, V, Y
