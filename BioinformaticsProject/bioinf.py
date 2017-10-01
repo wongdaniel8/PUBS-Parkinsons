@@ -5,9 +5,9 @@ import numpy as np
 import cPickle as pickle
 import matplotlib.pyplot as plt
 
-R1List = []
-R2List = []
-R3List = []
+#R1List = []
+#R2List = []
+#R3List = []
 r1Score = []
 r2Score = []
 r3Score = []
@@ -60,52 +60,52 @@ else:
 
 
 ##parse out Qscores and instantiate r(n)Score lists
- Qscore = dict((chr(i),i-33) for i in range(33,74))
- for file in files:
- 	if location == "l":
- 		if file == "R1":
- 			l1 = r1Score
- 		if file == "R2":
- 			l1 = r2Score
- 		if file =="R3":
- 			l1 = r3Score
- 	else:
- 		if file == "Undetermined_S0_L001_R1_001.fastq":
- 			l1 = r1Score
- 		if file == "Undetermined_S0_L001_R2_001.fastq":
- 			l1 = r2Score
- 		if file == "Undetermined_S0_L001_R3_001.fastq":
- 			l1 = r3Score
- 	with open(file, "rU") as f:
- 	    count = -3
- 	    for line in f:
- 	    	if count == -1 or count % 4 != 0:
- 	    		count += 1
- 	    		continue
- 	    	if count % 4 == 0:
- 		    	line = line.rstrip("\n")
- 		    	scores = []
- 		    	for char in line:
- 		    		scores.append(Qscore[char])
- 	    		l1.append(scores)
- 	   		count += 1
+Qscore = dict((chr(i),i-33) for i in range(33,74))
+for file in files:
+	if location == "l":
+		if file == "R1":
+			l1 = r1Score
+		if file == "R2":
+			l1 = r2Score
+		if file =="R3":
+			l1 = r3Score
+	else:
+		if file == "Undetermined_S0_L001_R1_001.fastq":
+			l1 = r1Score
+		if file == "Undetermined_S0_L001_R2_001.fastq":
+			l1 = r2Score
+		if file == "Undetermined_S0_L001_R3_001.fastq":
+			l1 = r3Score
+	with open(file, "rU") as f:
+	    count = -3
+	    for line in f:
+	    	if count == -1 or count % 4 != 0:
+	    		count += 1
+	    		continue
+	    	if count % 4 == 0:
+		    	line = line.rstrip("\n")
+		    	scores = []
+		    	for char in line:
+		    		scores.append(Qscore[char])
+	    		l1.append(scores)
+	   		count += 1
 
 
 ##dump into pickle files
- pickle.dump( R1List, open( "R1List.p", "wb" ) )
- pickle.dump( R2List, open( "R2List.p", "wb" ) )
- pickle.dump( R3List, open( "R3List.p", "wb" ) )
- pickle.dump( r1Score, open( "r1Score.p", "wb" ) )
- pickle.dump( r2Score, open( "r2Score.p", "wb" ) )
- pickle.dump( r3Score, open( "r3Score.p", "wb" ) )
+#pickle.dump( R1List, open( "R1List.p", "wb" ) )
+#pickle.dump( R2List, open( "R2List.p", "wb" ) )
+#pickle.dump( R3List, open( "R3List.p", "wb" ) )
+pickle.dump( r1Score, open( "r1Score.p", "wb" ) )
+pickle.dump( r2Score, open( "r2Score.p", "wb" ) )
+pickle.dump( r3Score, open( "r3Score.p", "wb" ) )
 
 
- print(r3Score)
- print(len(r1Score[0]))
- print(len(R1List[0]))
- print(r3Score)
- print(len(R1List[0]))
- print(len(r3Score[0]))
+print(r3Score)
+print(len(r1Score[0]))
+#print(len(R1List[0]))
+print(r3Score)
+#print(len(R1List[0]))
+print(len(r3Score[0]))
 
 
 
@@ -293,18 +293,18 @@ def merge(r1, r3, index):
 
 # count Ns in R1 N1
 # count Ns in R2 N2
-barcodes = {}
-for i in range(0, len(R1List)):
-	if R2List[i].count("N") > 15:
-		continue
-	merged = merge(R1List[i], R3List[i], i)
-	if merged == -1:
-		continue
-	else: #residue, codonMut, aminoAcid, num]
-		barcodes[R2List[i]] = [merged[0], merged[1], merged[2], aminoNum[merged[2]]]
-print(barcodes)
+#barcodes = {}
+#for i in range(0, len(R1List)):
+#	if R2List[i].count("N") > 15:
+#		continue
+#	merged = merge(R1List[i], R3List[i], i)
+#	if merged == -1:
+#		continue
+#	else: #residue, codonMut, aminoAcid, num]
+#		barcodes[R2List[i]] = [merged[0], merged[1], merged[2], aminoNum[merged[2]]]
+#print(barcodes)
 
-pickle.dump( barcodes, open( "barcodes.p", "wb" ) )
+#pickle.dump( barcodes, open( "barcodes.p", "wb" ) )
 
 
 
