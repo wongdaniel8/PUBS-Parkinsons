@@ -2,7 +2,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 import sys
 import numpy as np
-import pickle
+import cPickle as pickle
 import matplotlib.pyplot as plt
 
 R1List = []
@@ -17,6 +17,7 @@ CAATGAGGCTTATGAAATGCCTTCTGAGGAAGGGTATCAAGACTACGAACCTGAAGCC"
 
 ##load from pickle files
 translate = pickle.load(open("translate.pkl", "rb"))
+aminoNum = pickle.load(open("aminotonumber.pkl", "rb"))
 R1List = pickle.load( open( "R1List.p", "rb" ) )
 R2List = pickle.load( open( "R2List.p", "rb" ) )
 R3List = pickle.load( open( "R3List.p", "rb" ) )
@@ -199,29 +200,29 @@ def merge(r1, r3, index):
 			s1 = r1[mutIndexR1] + r1[mutIndexR1 + 1] + r1[mutIndexR1 + 2]
 			s1 = s1.replace("T", "U")
 			# print(mutIndexR1, translate[s1])
-			return (mutIndexR1, translate[s1])
+			return (mutIndexR1, s1, translate[s1])
 		if maxR1Index % 3 == 1:
 			s1 = r1[mutIndexR1 - 1] + r1[mutIndexR1] + r1[mutIndexR1 + 1]
 			s1 = s1.replace("T", "U")
-			return (mutIndexR1, translate[s1])
+			return (mutIndexR1, s1, translate[s1])
 		if maxR1Index % 3 == 2:
 			s1 = r1[mutIndexR1 - 2] + r1[mutIndexR1 - 1] + r1[mutIndexR1]
 			s1 = s1.replace("T", "U")
-			return (mutIndexR1, translate[s1])
+			return (mutIndexR1, s1, translate[s1])
 	
 	else: #check frame for r3rc!!!!!!!!!!!!!!
 		if mutIndexR3 % 3 == 0:
 			s1 = r3rc[mutIndexR3] + r3rc[mutIndexR3 + 1] + r3rc[mutIndexR3 + 2]
 			s1 = s1.replace("T", "U")
-			return (mutIndexR3, translate[s1])
+			return (mutIndexR3, s1, translate[s1])
 		if mutIndexR3 % 3 == 1:
 			s1 = r3rc[mutIndexR3 - 1] + r3rc[mutIndexR3] + r3rc[mutIndexR3 + 1]
 			s1 = s1.replace("T", "U")
-			return (mutIndexR3, translate[s1])
+			return (mutIndexR3, s1, translate[s1])
 		if mutIndexR3 % 3 == 2:
 			s1 = r3rc[mutIndexR3 - 2] + r3rc[mutIndexR3 - 1] + r3rc[mutIndexR3]
 			s1 = s1.replace("T", "U")
-			return (mutIndexR3, translate[s1])
+			return (mutIndexR3, s1, translate[s1])
 		
 	if len(r1mismatches) == 0 and len(r3rcmismatches) == 0: #no apparent mutation outside of the N-cases
 		print("thrown out")
@@ -292,9 +293,20 @@ def merge(r1, r3, index):
 
 # count Ns in R1 N1
 # count Ns in R2 N2
-
+barcodes = {}
 for i in range(0, len(R1List)):
-	merge(R1List[i], R3List[i], i)
+	if R2List[i].count("N") > 15:
+		continue
+	merged = merge(R1List[i], R3List[i], i)
+	if merged == -1:
+		continue
+	else: #residue, codonMut, aminoAcid, num]
+		barcodes[R2List[i]] = [merged[0], merged[1], merged[2], aminoNum[merged[2]]]
+print(barcodes) 
+
+pickle.dump( barcodes, open( "barcodes.p", "wb" ) )
+	
+
 
 
 
